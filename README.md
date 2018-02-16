@@ -12,7 +12,9 @@ Vagrant box using Ubuntu 14 (trusty), php5 and mariadb 10.1 for legacy applicati
 
 ## Nginx
 
-you may need to alter where your `www` root or drop stuff in:
+### content location
+
+- drop stuff in: `/usr/share/nginx/php`
 
 ### Connecting
 
@@ -27,6 +29,10 @@ you may need to alter where your `www` root or drop stuff in:
   <tr><td>Password</td><td>`password`</td></tr>
   <tr><td>Port</td><td>`13306`</td></tr>
 </table>
+
+## Clean up
+
+- `vagrant destroy`
 
 # Warnings :)
 
