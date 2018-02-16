@@ -7,12 +7,24 @@
 #
 # Install packages
 #
-sudo apt-get install software-properties-common
+sudo apt-get -y install software-properties-common
 sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db
-sudo add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu trusty main'
+sudo add-apt-repository -y 'deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.1/ubuntu trusty main'
 
-sudo apt-get update
-sudo apt-get install mariadb-server
+# do system update
+sudo apt-get -y update
+
+#
+# turn off annoying password prompt
+#
+
+# thanks: https://gist.github.com/sheikhwaqas/9088872
+export DEBIAN_FRONTEND="noninteractive"
+echo "mariadb-server mysql-server/root_password password password" | sudo debconf-set-selections
+echo "mariadb-server mysql-server/root_password_again password password" | sudo debconf-set-selections
+
+# install mariadb
+sudo apt-get -y install mariadb-server
 
 # install nginx
 sudo apt-get -y install nginx
@@ -20,12 +32,12 @@ sudo apt-get -y install nginx
 # install php5 and tools
 sudo apt-get -y install php5 php5-fpm php5-mysql
 
+#
+# need to check if we have to force link into rc2.d (seems to exist)
+#
 
 # ensure it is running
-sudo /etc/init.d/mysql restart
-
-# set to auto start (not yet a native service so use old style)
-sudo chkconfig mysql on
+sudo service mysql start
 
 ##
 ## post-install setup, configure root user and remove some other less secure things
@@ -50,12 +62,11 @@ mysql -u root -ppassword -e "DROP DATABASE test;"
 #
 
 # restart
-sudo /etc/init.d/mysql restart
+sudo service mysql restart
 
 # setup nginx php install confi
 sudo cp /vagrant/nginx/php.conf /etc/nginx/sites-available/php.conf
 
-#
 # nginx enabled areas (can't recall it now)
 sudo ln -s /etc/nginx/sites-available/php.conf /etc/nginx/sites-enabled/php.conf
 
