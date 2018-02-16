@@ -1,0 +1,3 @@
+# override bind ip to allow vagrant port forwarding (for whatever reason)
+[mysqld]
+bind-address		= 0.0.0.0

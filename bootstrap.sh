@@ -5,6 +5,11 @@
 #
 
 #
+# TODO: add cmd option or env override of this password
+#
+MYSQLPW="password"
+
+#
 # Install packages
 #
 sudo apt-get -y install software-properties-common
@@ -32,10 +37,6 @@ sudo apt-get -y install nginx
 # install php5 and tools
 sudo apt-get -y install php5 php5-fpm php5-mysql
 
-#
-# need to check if we have to force link into rc2.d (seems to exist)
-#
-
 # ensure it is running
 sudo service mysql start
 
@@ -57,9 +58,10 @@ mysql -u root -ppassword -e "DROP USER ''@'$(hostname)';"
 mysql -u root -ppassword -e "DROP DATABASE test;"
 
 #
-# TODO: add comment out of bind_address in /etc/mysql/my.cnf
-#       which seems to cause issues with ssh tunnels in mariadb 10.1 (not sure about others)
+# add local mysql/mariadb config to change bind_address
+# this fixes connecting through the port forwarded address on my machine
 #
+sudo cp /vagrant/my-vagrant.cnf /etc/mysql/conf.d/
 
 # restart
 sudo service mysql restart
